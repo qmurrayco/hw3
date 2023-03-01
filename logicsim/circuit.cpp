@@ -53,6 +53,7 @@ void Circuit::test()
 
 bool Circuit::parse(const char* fname)
 {
+    std::cout << "Heree" << std::endl;
     std::ifstream inFile(fname);
     if(!inFile)
     {
@@ -66,7 +67,7 @@ bool Circuit::parse(const char* fname)
         {
             std::string t_line;
             getline(inFile,t_line);
-            int n = stoi(t_line);
+            int n = std::stoi(t_line);
             for(int i = 0;i<n;i++)
             {
                 getline(inFile,t_line);
@@ -75,14 +76,14 @@ bool Circuit::parse(const char* fname)
                 getline(ss, s_id, ',');
                 std::string s_name;
                 getline(ss, s_name, ',');
-                m_wires.push_back(new Wire(stoi(s_id), s_name));
+                m_wires.push_back(new Wire(std::stoi(s_id), s_name));
             }
         }
         if(line == "GATES")
         {
             std::string t_line;
             getline(inFile,t_line);
-            int n = stoi(t_line);
+            int n = std::stoi(t_line);
             for(int i = 0;i<n;i++)
             {
                 getline(inFile,t_line);
@@ -97,7 +98,7 @@ bool Circuit::parse(const char* fname)
                     getline(ss, s_in2, ',');
                     std::string s_output;
                     getline(ss, s_output, ',');
-                    m_gates.push_back(new And2Gate(m_wires[stoi(s_in1)], m_wires[stoi(s_in2)], m_wires[stoi(s_output)]));
+                    m_gates.push_back(new And2Gate(m_wires[std::stoi(s_in1)], m_wires[std::stoi(s_in2)], m_wires[std::stoi(s_output)]));
                 }
                 if(s_type == "OR2")
                 {
@@ -107,16 +108,27 @@ bool Circuit::parse(const char* fname)
                     getline(ss, s_in2, ',');
                     std::string s_output;
                     getline(ss, s_output, ',');
-                    m_gates.push_back(new Or2Gate(m_wires[stoi(s_in1)], m_wires[stoi(s_in2)], m_wires[stoi(s_output)]));
+                    m_gates.push_back(new Or2Gate(m_wires[std::stoi(s_in1)], m_wires[std::stoi(s_in2)], m_wires[std::stoi(s_output)]));
                 }
                 //Add code here to support the NOT gate type
+                if(s_type == "NOT")
+                {
+                    std::cout << "Here" << std::endl;
+                    std::string s_in1;
+                    getline(ss, s_in1, ',');
+                    std::string s_in2;
+                    getline(ss, s_in2, ',');
+                    std::string s_output;
+                    getline(ss, s_output, ',');
+                    m_gates.push_back(new NotGate(m_wires[std::stoi(s_in1)], m_wires[std::stoi(s_in2)], m_wires[std::stoi(s_output)]));
+                }
             }
         }
         if(line == "INJECT")
         {
             std::string t_line;
             getline(inFile,t_line);
-            int n = stoi(t_line);
+            int n = std::stoi(t_line);
             for(int i = 0;i<n;i++)
             {
                 getline(inFile,t_line);
@@ -127,7 +139,7 @@ bool Circuit::parse(const char* fname)
                 getline(ss, s_wire, ',');
                 std::string s_state;
                 getline(ss, s_state, ',');
-            	Event* e = new Event {static_cast<uint64_t>(stoi(s_time)),m_wires[stoi(s_wire)],s_state[0]};
+            	Event* e = new Event {static_cast<uint64_t>(std::stoi(s_time)),m_wires[std::stoi(s_wire)],s_state[0]};
                 //std::cout << s_time << "," << s_wire << "," << s_state << std::endl;
             	m_pq.push(e);
             }
